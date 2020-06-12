@@ -9,7 +9,7 @@ const Dog = ({id, name, toggle, getStatus}) => {
                                 display: "inline-block",
                                 marginRight: "15px"
                             }}>
-                                {name}
+                                <a href={"/detail/"+id}>{name}</a>
                             </span>
         <FavoriteActions toggle={toggle} id={id} getStatus={getStatus}/>
     </li>
