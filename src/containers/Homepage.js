@@ -14,7 +14,8 @@ class Homepage extends React.Component {
 
         this.state = {
             favorites: [],
-            loadingFavorites: false
+            loadingFavorites: false,
+            favoriyeEkle: false
         }
     }
     componentDidMount() {
@@ -43,24 +44,34 @@ class Homepage extends React.Component {
     toggle = (dogId)=>{
         const foundDog = this.state.favorites.find((favorite) => favorite.dogId === dogId);
         if(foundDog){
-            axios.delete(`${apiHost}/favorites/${foundDog.id}`).then((result) => {
-                this.setState(({
-                    favorites: this.state.favorites.filter((dog) => dog.dogId !== dogId)
-                }))
-            }).catch((err) => {
-                console.log(err);
-            });
+            this.setState({
+                favoriyeEkle: true
+            }, () => {
+                axios.delete(`${apiHost}/favorites/${foundDog.id}`).then((result) => {
+                    this.setState(({
+                        favorites: this.state.favorites.filter((dog) => dog.dogId !== dogId),
+                        favoriyeEkle: false
+                    }))
+                }).catch((err) => {
+                    console.log(err);
+                });
+            })
         }else{
             // window.localStorage.setItem("favorites", JSON.stringify(this.state.favorites));
-            axios.post(`${apiHost}/favorites`, {
-                dogId
-            }).then((result) => {
-                const eklenenFavori = result.data; // {id: 1, dogId: benim yolladigim dog id, createdat: date}
-                this.setState({
-                    favorites: [...this.state.favorites, eklenenFavori]
+            this.setState({
+                favoriyeEkle: true
+            }, () => {
+                axios.post(`${apiHost}/favorites`, {
+                    dogId
+                }).then((result) => {
+                    const eklenenFavori = result.data; // {id: 1, dogId: benim yolladigim dog id, createdat: date}
+                    this.setState({
+                        favorites: [...this.state.favorites, eklenenFavori],
+                        favoriyeEkle: false
+                    })
+                }).catch((err) => {
+                    console.log(err);
                 })
-            }).catch((err) => {
-                console.log(err);
             })
         }
     }
@@ -81,7 +92,7 @@ class Homepage extends React.Component {
                 <ul>
                     {
                         dogs.map((dog) => {
-                            return <Dog toggle={this.toggle} id={dog.id} getStatus={this.getStatus} {...dog}/>
+                            return <Dog favoriyeEkle={this.state.favoriyeEkle} toggle={this.toggle} id={dog.id} getStatus={this.getStatus} {...dog}/>
                         })
                     }
                 </ul>
