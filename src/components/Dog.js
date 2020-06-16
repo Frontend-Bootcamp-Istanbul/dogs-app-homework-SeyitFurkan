@@ -1,7 +1,7 @@
 import React from 'react';
 import FavoriteActions from "./FavoriteActions";
 
-const Dog = ({id, name, toggle, getStatus}) => {
+const Dog = ({id, name, toggle, getStatus, favoriyeEkle}) => {
     return <li key={id} style={{
         margin: "15px"
     }}>
@@ -9,9 +9,9 @@ const Dog = ({id, name, toggle, getStatus}) => {
                                 display: "inline-block",
                                 marginRight: "15px"
                             }}>
-                                {name}
+                                <a href={"/detail/"+id}>{name}</a>
                             </span>
-        <FavoriteActions toggle={toggle} id={id} getStatus={getStatus}/>
+        <FavoriteActions favoriyeEkle={favoriyeEkle} toggle={toggle} id={id} getStatus={getStatus}/>
     </li>
 };
 
